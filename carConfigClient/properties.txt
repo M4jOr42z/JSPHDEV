@@ -1,0 +1,9 @@
+CarModel=Prius
+CarMake=Toyota
+BasePrice=18641
+OptionSet1=Transmission
+OptionSet1Option1=Manual,-815
+OptionSet1Option2=Automatic,125
+OptionSet2=Brakes
+OptionSet2Option1=Regular,0
+OptionSet2Option2=ABS,1350
