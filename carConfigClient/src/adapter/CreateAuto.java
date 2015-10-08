@@ -9,7 +9,5 @@ package adapter;
 import util.Properties;
 
 public interface CreateAuto {
-	public boolean buildAuto(String filename);
-	public void printAuto(String modelName);
-	
+	public Object buildAuto(String filename, String fileType);
 }

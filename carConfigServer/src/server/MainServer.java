@@ -18,20 +18,27 @@ public class MainServer {
 		BuildCarModelOptions handler;
 		BuildAuto autoFactory = new BuildAuto();
 		
-		try {
-			serverSock = new ServerSocket(iPort);
-		} catch (IOException e) {
-			System.out.println("Cannot listen to " + iPort);
+		/* create a listening socket */
+		while (serverSock == null) {
+			try {
+				serverSock = new ServerSocket(iPort);
+				serverSock.setReuseAddress(true);
+			} catch (IOException e) {
+				System.out.println("Cannot listen to " + iPort);
+				System.exit(1);
+			}
 		}
+		/* start listening incoming connections */
 		while (true) {
 			System.out.println("Waiting...");
 			try{
 				clientSock = serverSock.accept();
+				handler = new BuildCarModelOptions(clientSock, autoFactory);
+				handler.start();
 			} catch (Exception e) {
 				System.out.println("Cannot accept client!");
 			}
-			handler = new BuildCarModelOptions(clientSock, autoFactory);
-			handler.start();
+
 		}
 	}
 }

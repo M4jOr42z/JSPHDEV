@@ -11,6 +11,7 @@ package server;
 import util.Properties;
 import adapter.BuildAuto;
 import java.net.*;
+import java.nio.file.Files;
 import java.io.*;
 
 public class BuildCarModelOptions extends DefaultSocketClient {
@@ -22,25 +23,50 @@ public class BuildCarModelOptions extends DefaultSocketClient {
 		this.autoFactory = autoFactory;
 	}
 	
-	/* handle an upload request */
 	public void handleSession() {
+		Object o;
+		
 		// read client request 
 		String request = (String) readInput();
 		switch (request) {
+		/* handle an upload request */
 		case "upload":
+			String fileType;
+			
 			// send to client for ready
-			sendOutput("ready");
-			// wait for client to send the object
-			Object o;
-			while ((o = readInput()) == null);
-			// read a props object from client
-			Properties p = (Properties) o;
-			// build an Auto Object from this props file
-			if (autoFactory.loadPropsToAuto(p))
-				sendOutput("sent auto model was built!\n");
-			else
-				sendOutput("built auto model failed!\n");
+			sendOutput("OK");
+			// wait for client to send file type and object
+			o = readInput();
+			if (o != null) {
+				fileType = (String) o;
+				while ((o = readInput()) == null);
+				if (fileType.equals("props")) {
+					// read a props object from client
+					Properties p = (Properties) o;
+					// build an Auto Object from this props file
+					if (autoFactory.loadPropsToAuto(p))
+						sendOutput("SUC");
+					else
+						sendOutput("FAIL");
+				} else {
+					// read a normal text file
+					byte[] contents = (byte[]) o;
+					File f = new File("normal.txt");
+					try {
+					// write contents to disk file
+						Files.write(f.toPath(), contents);
+					} catch (IOException e) {
+						System.out.println("Cannot write normal text to server disk");
+					}
+					// build an Auto Object from normal text file
+					if (autoFactory.buildAuto("normal.txt"))
+						sendOutput("SUC");
+					else
+						sendOutput("FAIL");
+				}
+			}
 			break;
+		/* handle a configuration request */
 		case "config":
 			// send a list of available models
 			// sendOutput(xxx);

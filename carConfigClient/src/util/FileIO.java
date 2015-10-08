@@ -7,6 +7,8 @@ package util;
 import model.Automobile;
 
 import java.io.*;
+import java.nio.file.Files;
+
 import exception.*;
 
 public class FileIO {
@@ -159,6 +161,20 @@ public class FileIO {
 			return null;
 		}
 		return props;
+	}
+	
+	/* read a normal text file contents */
+	public byte[] parseNormalText(String filename) {
+		File file = null;
+		byte[] fileContents = null;
+		
+		try {
+			file = new File(filename);
+			fileContents = Files.readAllBytes(file.toPath());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return fileContents;
 	}
 	
 

@@ -1,11 +1,12 @@
 /**
  * @author zhexinq
- * interface for a threaded socket client
+ * defaultSocketClient Interface constants
  */
 
 package client;
 
 public interface SocketClientConstants {
-	int iCAR_PORT = 8080;
+	String iHOST = "127.0.0.1";
+	int iCAR_PORT = 18641;
 	boolean DEBUG = true;
 }

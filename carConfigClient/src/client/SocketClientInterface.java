@@ -1,6 +1,6 @@
 /**
  * @author zhexinq
- * interface for a threaded socket client
+ * interface for defaut socket client
  */
 
 package client;

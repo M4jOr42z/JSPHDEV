@@ -23,26 +23,27 @@ public abstract class ProxyAutomobile {
 	
 	/* in CreateAuto API */
 	/* build the auto model object */
-	public void buildAuto(String filename) {
+	public boolean buildAuto(String filename) {
 		FileIO io = new FileIO();
-		boolean fileFound = false;
 		Automobile a1;
 			
 		/* handle error when filename is wrong */
-		do {
-			try {
-				a1 = io.buildAutoObject(filename);
-				fileFound = true;
-				/* put the built model to collection */
-				if (a1 != null) 
-					autos.put(a1.getModel(), a1);
+		try {
+			a1 = io.buildAutoObject(filename);
+			/* put the built model to collection */
+			if (a1 != null)  {
+				System.out.println("Built a new vehicle:");
+				a1.printInfo();
+				autos.put(a1.getModel(), a1);
+				return true;
 			}
-			catch (WrongInputException e) {
-				e.recordLog("log.txt", e);
-				e.printInfo();
-				filename = fix(e.getErrno());
-			}
-		} while (!fileFound);
+		}
+		catch (WrongInputException e) {
+			e.recordLog("log.txt", e);
+			e.printInfo();
+			filename = fix(e.getErrno());
+		}
+		return false;
 	}
 	/* print the auto model information */
 	public void printAuto(String modelName) {
@@ -99,6 +100,7 @@ public abstract class ProxyAutomobile {
 	
 	/* load a props file into Auto and add to LHM autos */
 	// CarModel->CarMake->BasePrice->OptionSet1->OptionSet1Option1->...
+	// only used in the server side
 	// return true if props loaded successfully, false otherwise
 	public boolean loadPropsToAuto(Properties p) {
 		String carModel;  
@@ -127,7 +129,7 @@ public abstract class ProxyAutomobile {
 				setName = p.getProperties(optSetQuery);
 				if (setName == null)
 					break;
-				System.out.println("set name: " + setName);
+//				System.out.println("set name: " + setName);
 				queryStrBase.append("Option");
 				int j = 1;
 				while (true) {
@@ -136,12 +138,12 @@ public abstract class ProxyAutomobile {
 					String optnameValue = p.getProperties(optQuery);
 					if (optnameValue == null)
 						break;
-					System.out.println(optnameValue);
+//					System.out.println(optnameValue);
 					String[] nameValuePair = optnameValue.split(",");
 					optName = nameValuePair[0];
 					optPrice = Integer.parseInt(nameValuePair[1]);
-					System.out.println("opt name: " + optName);
-					System.out.println("opt price: " + optPrice);
+//					System.out.println("opt name: " + optName);
+//					System.out.println("opt price: " + optPrice);
 					setOptions.add(optName);
 					setPrices.add(optPrice);
 					j++;
@@ -149,7 +151,7 @@ public abstract class ProxyAutomobile {
 				a1.updateNewOptionSet(setName, setOptions, setPrices);
 				i++;
 			}
-			System.out.println("finish parsing!");
+			System.out.println("Built a new vehicle:");
 			a1.printInfo();
 			/* add the built auto to LHM */
 			autos.put(a1.getModel(), a1);
