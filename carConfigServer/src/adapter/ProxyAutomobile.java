@@ -163,7 +163,18 @@ public abstract class ProxyAutomobile {
 	}
 	
 	/* provide a list of available models */
+	public ArrayList<String> getAvailableModels() {
+		ArrayList<String> models = new ArrayList<String>();
+		for (String model:autos.keySet()) {
+			models.add(model);
+		}
+		return models;
+	}
 	
+	/* get a selected car model */
+	public Automobile getSelectedModel(String modelName) {
+		return autos.get(modelName);
+	}
 	
 	/* fix error */
 	public String fix(int errno) {

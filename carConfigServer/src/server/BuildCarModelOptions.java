@@ -10,8 +10,11 @@ package server;
 
 import util.Properties;
 import adapter.BuildAuto;
+import model.Automobile;
+
 import java.net.*;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.io.*;
 
 public class BuildCarModelOptions extends DefaultSocketClient {
@@ -32,7 +35,6 @@ public class BuildCarModelOptions extends DefaultSocketClient {
 		/* handle an upload request */
 		case "upload":
 			String fileType;
-			
 			// send to client for ready
 			sendOutput("OK");
 			// wait for client to send file type and object
@@ -68,10 +70,23 @@ public class BuildCarModelOptions extends DefaultSocketClient {
 			break;
 		/* handle a configuration request */
 		case "config":
+			int select;
+			
+			sendOutput("OK");
 			// send a list of available models
-			// sendOutput(xxx);
+			ArrayList<String> models = autoFactory.getAvailableModels();
+			sendOutput(models);
 			// read a selection and send the auto object
-			// sendOutput(xxx);	
+			o = readInput();
+			try {
+				select = Integer.parseInt((String)o);
+			} catch (Exception e) {
+				System.out.println("bad input");
+				sendOutput("BAD_REQUEST");
+				break;
+			}
+			Automobile auto = autoFactory.getSelectedModel(models.get(select));
+			sendOutput(auto);
 			break;
 		default:
 			System.out.println("do not understand request: " + request);

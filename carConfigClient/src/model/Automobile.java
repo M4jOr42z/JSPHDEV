@@ -239,8 +239,16 @@ public class Automobile implements Serializable {
 			set.printInfo();
 		}
 		int totalPrice = getTotalPrice();
+		
+		System.out.println("\nUser choice: ");
+		for (OptionSet opset:this.opsets) {
+			Option opt = opset.getOptionChoice();
+			if (opt != null)
+				System.out.printf("%s: chose (%s, $%d)\n", opset.getName(), opt.getName(), opt.getPrice());
+		}
+		
 		if (totalPrice >= 0)
-			System.out.printf("Price calculated from user choice: %d", totalPrice);
+			System.out.printf("Price calculated from user choice: %d\n", totalPrice);
 		else
 			System.out.println("Price cannot be shown, since user didn't choose all options yet");
 	}

@@ -5,8 +5,11 @@
 package server;
 
 import util.Properties;
+
+import java.util.ArrayList;
 import model.Automobile;
 
 public interface AutoServer {
 	public boolean loadPropsToAuto(Properties p);
+	public ArrayList<String> getAvailableModels();
 }

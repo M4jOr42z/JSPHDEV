@@ -27,81 +27,36 @@ public class CarModelOptionsIO extends DefaultSocketClient {
 	}
 	
 	/* upload different types of file for building car model */
-
-	// 2. receive OK
-	// 3. send fileType (e.g. props, txt)
-	// 4. receive OK
-	// 5. send object
-	// 6. receive verification 
-	// 7. hang up
 	public void handleSession() {
 		Object o;
 		String msg, userIn;
 		BuildAuto autoFact = new BuildAuto();
 		
-		// ask the user
-		switch (interactWithUser()) {
-		// upload a file
-		case 1:
-			// send "upload" request
-			sendOutput("upload");
-			// wait for response
+		// send "upload" request
+		sendOutput("upload");
+		// wait for response
+		while ((o = readInput()) == null);
+		msg = (String) o;
+		if (!msg.equals("OK"))
+			return;
+		// ask user for file type
+		System.out.println("input the file name and file type seperated by space:");
+		userIn = userInput.nextLine();
+		String[] fNameType = userIn.split(" ");
+		// build the object on client side
+		o = autoFact.buildAuto(fNameType[0], fNameType[1]);
+		if (o != null) {
+			// send fileType and file object to server
+			sendOutput(fNameType[1]);
+			sendOutput(o);
+			// wait for verification
 			while ((o = readInput()) == null);
 			msg = (String) o;
-			if (!msg.equals("OK"))
-				break;
-			// ask user for file type
-			System.out.println("input the file name and file type seperated by space:");
-			userIn = userInput.nextLine();
-			String[] fNameType = userIn.split(" ");
-			// build the object on client side
-			o = autoFact.buildAuto(fNameType[0], fNameType[1]);
-			if (o != null) {
-				// send fileType and file object to server
-				sendOutput(fNameType[1]);
-				sendOutput(o);
-				// wait for verification
-				while ((o = readInput()) == null);
-				msg = (String) o;
-				if (msg.equals("SUC"))
-					System.out.printf("server response code: %s\n", msg);
-				else 
-					System.out.printf("server response code: %s\n", msg);
-			}
-			break;
-		// configure a car
-		case 2:
-			break;
-		default:
-			break;
+			if (msg.equals("SUC"))
+				System.out.printf("server response code: %s\n", msg);
+			else 
+				System.out.printf("server response code: %s\n", msg);
 		}
-	}
-	
-	/* interact with user */
-	// return a selection, if not select -1
-	private int interactWithUser() {
-		int result = -1;
-		
-		while (true) {
-			try{
-				System.out.println("Please select your option below:\nEnter 1->upload a file\nEnter 2->configure a car");
-				String s = userInput.nextLine();
-				if (s.equals("exit")) {
-					System.out.println("bye!");
-					break;
-				}
-				result = Integer.parseInt(s);
-				if (result < 1 || result > 2) {
-					System.out.println("Only integer 1, 2 are allowed");
-					continue;
-				} else {
-					return result;
-				}
-			} catch (NumberFormatException e) {
-				System.out.println("Not an integer, try again!");
-			}
-		}
-		return result;
 	}
 	
 	/* spawn clients */
@@ -110,7 +65,7 @@ public class CarModelOptionsIO extends DefaultSocketClient {
 		CarModelOptionsIO clientIO;
 		
 		while (true) {
-			System.out.println("Type anything to spawn a new client, type q to quit");
+			System.out.println("Type anything to spawn a new upload client, type q to quit");
 			String in = mainScanner.nextLine();
 			if (in.equals("q"))
 				break;
