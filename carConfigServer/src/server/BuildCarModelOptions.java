@@ -28,6 +28,7 @@ public class BuildCarModelOptions extends DefaultSocketClient {
 	
 	public void handleSession() {
 		Object o;
+		ArrayList<String> models;
 		
 		// read client request 
 		String request = (String) readInput();
@@ -55,7 +56,7 @@ public class BuildCarModelOptions extends DefaultSocketClient {
 					byte[] contents = (byte[]) o;
 					File f = new File("normal.txt");
 					try {
-					// write contents to disk file
+					// write contens to disk file
 						Files.write(f.toPath(), contents);
 					} catch (IOException e) {
 						System.out.println("Cannot write normal text to server disk");
@@ -71,22 +72,26 @@ public class BuildCarModelOptions extends DefaultSocketClient {
 		/* handle a configuration request */
 		case "config":
 			int select;
-			
+		
 			sendOutput("OK");
-			// send a list of available models
-			ArrayList<String> models = autoFactory.getAvailableModels();
-			sendOutput(models);
 			// read a selection and send the auto object
 			o = readInput();
 			try {
-				select = Integer.parseInt((String)o);
+				select = (Integer)o;
 			} catch (Exception e) {
 				System.out.println("bad input");
 				sendOutput("BAD_REQUEST");
 				break;
 			}
+			models = autoFactory.getAvailableModels();
 			Automobile auto = autoFactory.getSelectedModel(models.get(select));
 			sendOutput(auto);
+			break;
+		case "query_models":
+			sendOutput("OK");
+			// send a list of available models
+			models = autoFactory.getAvailableModels();
+			sendOutput(models);
 			break;
 		default:
 			System.out.println("do not understand request: " + request);
