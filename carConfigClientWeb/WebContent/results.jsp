@@ -24,11 +24,13 @@ String makeAndModel = auto.getMake() + " " + auto.getModel();
 <% for (String setName:setNames) { %>
   <tr>
     <td><%= setName %></td>
-    <td><%= auto.getOptionChoice(setName) %></td>		
+    <td><%= auto.getOptionChoice(setName) %></td>
+    <td><%= auto.getOptionChoicePrice(setName) %></td>		
   </tr>
   <%} %>
   <tr>
   	<td>Totol Cost
+  	<td>
   	<td><%= price %>
   </tr>
 </table>

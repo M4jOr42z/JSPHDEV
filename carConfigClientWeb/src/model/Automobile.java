@@ -241,7 +241,7 @@ public class Automobile implements Serializable {
 		return setNames;
 	}
 	/* get Option names from Set name */
-	public String[] getOptionName(String setName) {
+	public String[] getOptionNames(String setName) {
 		OptionSet set = findOptionSet(setName);
 		if (set != null) {
 			ArrayList<Option> options = set.getOptions();

@@ -27,8 +27,8 @@ request.setAttribute("autoToConfigure", auto);
     <td><%= setName %></td>
     <td>    	<select name=<%= setName %> >
 
-    	<% for (String optName:auto.getOptionName(setName)) { %>
-    	<option value=<%= optName %>> <%= optName %>
+    	<% for (String optName:auto.getOptionNames(setName)) { 
+    		out.println("<option value=\"" + optName + "\">" + optName);														%>
     	<%} %>
     	</select>
     </td>		
