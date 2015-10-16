@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import client.CarModelOptionsIO;
+import client.CarModelPropertiesIO;
 
 @WebServlet(name="uploadCar",urlPatterns="/uploadCar")
 public class ModelUpload extends HttpServlet {
@@ -32,7 +32,7 @@ public class ModelUpload extends HttpServlet {
 		String fileType = request.getParameter("fileType");
 		
 		// execute an upload thread
-		CarModelOptionsIO modelsIo = new CarModelOptionsIO(filePath, fileType);
+		CarModelPropertiesIO modelsIo = new CarModelPropertiesIO(filePath, fileType);
 		try {
 			modelsIo.start();
 			modelsIo.join();

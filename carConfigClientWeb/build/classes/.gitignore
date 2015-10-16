@@ -1,9 +1,2 @@
-/.DS_Store
-/adapter/
 /client/
-/driver/
-/exception/
-/model/
-/scale/
 /servlets/
-/util/

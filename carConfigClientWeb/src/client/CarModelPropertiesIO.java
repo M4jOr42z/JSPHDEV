@@ -11,18 +11,18 @@ import java.util.Scanner;
 
 import adapter.BuildAuto;
 
-public class CarModelOptionsIO extends DefaultSocketClient {
+public class CarModelPropertiesIO extends DefaultSocketClient {
 	private String filePath, fileType;
 
 	/* use default server address and port */
-	public CarModelOptionsIO(String filePath, String fileType) {
+	public CarModelPropertiesIO(String filePath, String fileType) {
 		super();
 		this.filePath = filePath;
 		this.fileType = fileType;
 	}
 	
 	/* choose a server to connect */
-	public CarModelOptionsIO(String strHost, int iPort, String fileName, String fileType) {
+	public CarModelPropertiesIO(String strHost, int iPort, String fileName, String fileType) {
 		super(strHost, iPort);
 		this.filePath = fileName;
 		this.fileType = fileType;
@@ -60,7 +60,7 @@ public class CarModelOptionsIO extends DefaultSocketClient {
 	/* spawn clients */
 	public static void main(String[] args) {
 		Scanner mainScanner = new Scanner(System.in);
-		CarModelOptionsIO clientIO;
+		CarModelPropertiesIO clientIO;
 		
 		while (true) {
 			System.out.println("Type anything to spawn a new upload client, type q to quit");
@@ -68,7 +68,7 @@ public class CarModelOptionsIO extends DefaultSocketClient {
 			if (in.equals("q"))
 				break;
 			else {
-				clientIO= new CarModelOptionsIO("props/corvette.txt", "props"); 
+				clientIO= new CarModelPropertiesIO("props/corvette.txt", "props"); 
 				clientIO.start();
 				try {
 					/* wait for the client thread to finish */

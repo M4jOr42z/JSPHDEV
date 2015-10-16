@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import client.CarModelOptionsIO;
 import client.QueryAvailableCars;
 
 @WebServlet("/modelList")
