@@ -10,16 +10,13 @@
 </head>
 <body>
 <% 
-String brand = (String)request.getAttribute("brand");
 Automobile auto = (Automobile)request.getAttribute("auto");
-Integer autoId = (Integer)request.getAttribute("autoId");
 String[] setNames = auto.getOptionSetNames();
 String makeAndModel = auto.getMake() + " " + auto.getModel();
-request.setAttribute("autoToConfigure", auto);
 %>
 
 <h1>Basic Car Choice</h1>
-<form action="choiceResult" method="get">
+<form action="dispatcher" method="get">
 <table style="width:100%" action="">
 <tr bgcolor="#FDF5E6"><th>Make/Model<th><%=makeAndModel%>
 <% for (String setName:setNames) { %>
@@ -35,7 +32,7 @@ request.setAttribute("autoToConfigure", auto);
   </tr>
   <%} %>
 </table>
-<input type="hidden" name="autoId" value=<%=autoId %> />
+<input type="hidden" name="requestType" value="choiceResult"/>
 <input type="submit" value="Done"/>
 </form>
 

@@ -8,7 +8,7 @@
 <title>Select a car to configure</title>
 </head>
 <body>
-<form action="carOptions">
+<form action="dispatcher">
 	<br>
 	<select name="models" multiple="4">
 <%@ page import="java.util.*" %>	
@@ -18,6 +18,7 @@
 	<option value=<%= i %>><%= models.get(i) %></option>
 <% } %>
 	</select>
+	<input type="hidden" name="requestType" value="requestOptions"/>
 	<input type="submit" name="selectCar">
 	</form>
 </body>

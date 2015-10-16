@@ -80,9 +80,10 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
 
     <div class="login">
 	<h1>Car Upload</h1>
-    <form method="get" action="uploadCar" OnSubmit="window.alert('Your request has been submitted.')">
+    <form method="get" action="dispatcher" OnSubmit="window.alert('Your request has been submitted.')">
     	<input type="text"  placeholder="car file path" required="required" name="filePath"/>
         <input type="text"  placeholder="car file type" required="required" name="fileType"/>
+        <input type="hidden" name="requestType" value="upload"/>
         <button type="submit" class="btn btn-primary btn-block btn-large">upload</button>
     </form>
 </div>
