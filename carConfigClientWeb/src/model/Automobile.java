@@ -129,6 +129,16 @@ public class Automobile implements Serializable {
 		// add the constructed OptionSet back
 		this.opsets.add(optset);
 	}
+	// update a new set to auto using ArrayList of options and prices
+		public void updateNewOptionSet(String setName, ArrayList<String> setOptions, ArrayList<Integer> setPrices) {
+			int N = setOptions.size();
+			ArrayList<Option> options = new ArrayList<Option>();
+			for (int i = 0; i < N; i++) {
+				options.add(new Option(setOptions.get(i), setPrices.get(i)));
+			}
+			OptionSet optset = new OptionSet(options, setName);
+			this.opsets.add(optset);
+	}
 	// update an OptionSet by name
 	public void updateOptionSet(String setName, String[] setOptions, int[] setPrices) {
 		assert(setOptions.length == setPrices.length && setOptions.length >= 0);
@@ -207,6 +217,17 @@ public class Automobile implements Serializable {
 		OptionSet set = findOptionSet(setName);
 		if (set != null)
 			return set.getOptionChoice().getPrice();
+		return -1;
+	}
+	/* get price of an option */
+	public int getOptionPrice(String setName, String optName) {
+		OptionSet set = findOptionSet(setName);
+		if (set != null) {
+			Option opt = set.getOption(optName);
+			if (opt != null) {
+				return opt.getPrice();
+			}
+		}
 		return -1;
 	}
 	/* get total price */

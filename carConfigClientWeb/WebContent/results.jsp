@@ -20,18 +20,18 @@ String makeAndModel = auto.getMake() + " " + auto.getModel();
 
 <table style="width:100%" action="">
 <tr bgcolor="#FDF5E6"><th><%=makeAndModel %>
-<th>base price<th> <%= auto.getBasePrice() %>
+<th>base price<th> $<%= auto.getBasePrice() %>
 <% for (String setName:setNames) { %>
   <tr>
     <td><%= setName %></td>
     <td><%= auto.getOptionChoice(setName) %></td>
-    <td><%= auto.getOptionChoicePrice(setName) %></td>		
+    <td>$<%= auto.getOptionChoicePrice(setName) %></td>		
   </tr>
   <%} %>
   <tr>
   	<td>Totol Cost
   	<td>
-  	<td><%= price %>
+  	<td>$<%= price %>
   </tr>
 </table>
 

@@ -130,14 +130,14 @@ public class Automobile implements Serializable {
 		this.opsets.add(optset);
 	}
 	// update a new set to auto using ArrayList of options and prices
-	public void updateNewOptionSet(String setName, ArrayList<String> setOptions, ArrayList<Integer> setPrices) {
-		int N = setOptions.size();
-		ArrayList<Option> options = new ArrayList<Option>();
-		for (int i = 0; i < N; i++) {
-			options.add(new Option(setOptions.get(i), setPrices.get(i)));
-		}
-		OptionSet optset = new OptionSet(options, setName);
-		this.opsets.add(optset);
+		public void updateNewOptionSet(String setName, ArrayList<String> setOptions, ArrayList<Integer> setPrices) {
+			int N = setOptions.size();
+			ArrayList<Option> options = new ArrayList<Option>();
+			for (int i = 0; i < N; i++) {
+				options.add(new Option(setOptions.get(i), setPrices.get(i)));
+			}
+			OptionSet optset = new OptionSet(options, setName);
+			this.opsets.add(optset);
 	}
 	// update an OptionSet by name
 	public void updateOptionSet(String setName, String[] setOptions, int[] setPrices) {
@@ -219,6 +219,17 @@ public class Automobile implements Serializable {
 			return set.getOptionChoice().getPrice();
 		return -1;
 	}
+	/* get price of an option */
+	public int getOptionPrice(String setName, String optName) {
+		OptionSet set = findOptionSet(setName);
+		if (set != null) {
+			Option opt = set.getOption(optName);
+			if (opt != null) {
+				return opt.getPrice();
+			}
+		}
+		return -1;
+	}
 	/* get total price */
 	// if not all options has been made, return -1
 	public int getTotalPrice() {
@@ -242,6 +253,30 @@ public class Automobile implements Serializable {
 		}
 	}
 	
+	/* get OptionSet names */
+	public String[] getOptionSetNames() {
+		String[] setNames = new String[opsets.size()];
+		for (int i = 0; i < opsets.size(); i++) {
+			setNames[i] = opsets.get(i).getName(); 
+		}
+		return setNames;
+	}
+	/* get Option names from Set name */
+	public String[] getOptionNames(String setName) {
+		OptionSet set = findOptionSet(setName);
+		if (set != null) {
+			ArrayList<Option> options = set.getOptions();
+			String[] optNames = new String[options.size()];
+			for (int i = 0; i < optNames.length; i++) {
+				optNames[i] = options.get(i).getName();
+			}
+			return optNames;
+		}
+		else
+			return null;
+			
+	}
+	
 	/* print */
 	public void printInfo() {
 		System.out.printf("make: %s, model: %s, base price: %d\n", this.make, this.model, this.basePrice);
@@ -249,8 +284,16 @@ public class Automobile implements Serializable {
 			set.printInfo();
 		}
 		int totalPrice = getTotalPrice();
+		
+		System.out.println("\nUser choice: ");
+		for (OptionSet opset:this.opsets) {
+			Option opt = opset.getOptionChoice();
+			if (opt != null)
+				System.out.printf("%s: chose (%s, $%d)\n", opset.getName(), opt.getName(), opt.getPrice());
+		}
+		
 		if (totalPrice >= 0)
-			System.out.printf("Price calculated from user choice: %d", totalPrice);
+			System.out.printf("Price calculated from user choice: %d\n", totalPrice);
 		else
 			System.out.println("Price cannot be shown, since user didn't choose all options yet");
 	}

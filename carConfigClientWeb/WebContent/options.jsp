@@ -24,9 +24,9 @@ String makeAndModel = auto.getMake() + " " + auto.getModel();
     <td><%= setName %></td>
     <td>    	<select name=<%= setName %> >
 
-    	<% for (String optName:auto.getOptionNames(setName)) { 
-    		out.println("<option value=\"" + optName + "\">" + optName);														%>
-    	<%} %>
+    	<% for (String optName:auto.getOptionNames(setName)) 
+    		out.println("<option value=\"" + optName + "\">" + optName + "/$" + auto.getOptionPrice(setName, optName));
+    		%>
     	</select>
     </td>		
   </tr>
