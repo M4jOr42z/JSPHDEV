@@ -1,50 +1,68 @@
 /**
  * @author zhexinq
- * driver class for testing server/client communication
+ * driver class for testing persisting LHM in DB
  */
 
 package driver;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
+
+import javax.swing.JFrame;
+
+import adapter.BuildAuto;
+import database.ProxyDBHandler;
+import util.FileIO;
 import util.Properties;
 
 public class Driver {
+
 	
 	public static void main(String[] args) {
-		Socket client = null;
-		ObjectOutputStream out = null;
-		ObjectInputStream in = null;
-		Properties p = null;
-		
-		try {
-			in = new ObjectInputStream(new FileInputStream("props.dat"));
-			p = (Properties)in.readObject();
-		} catch (Exception e) {
-			e.printStackTrace();
+		BuildAuto autoFactory = new BuildAuto();
+		/* load with a bunch of car files, the database should also persist thest files */
+		FileIO io = new FileIO();
+		Properties p = io.parseProps("props/aucura.txt");
+		autoFactory.loadPropsToAuto(p);
+		p = io.parseProps("props/corvette.txt");
+		autoFactory.loadPropsToAuto(p);
+		p = io.parseProps("props/prius.txt");
+		autoFactory.loadPropsToAuto(p);
+		System.out.println("Loaded 3 car files... type tables names to see the changes..."
+				+ " table names: autos, optionsets, options... type c to continue");
+		Scanner sc = new Scanner(System.in);
+		String line;
+		while (!(line = sc.nextLine()).equals("c")) {
+			ProxyDBHandler.showTable(line);
 		}
-		try {
-			client = new Socket("127.0.0.1", 18641);
-		} catch (IOException e) {
-			System.out.println("cannot connect to server");
+		/* change the option price */
+		autoFactory.updateOptionPrice("Aucura ILX", "Color", "Black", 99999);
+		System.out.println("Change Aucura ILX's Color Option Black's price");
+		System.out.println("type tables names to see the changes..."
+				+ " table names: autos, optionsets, options... type c to continue");
+		while (!(line = sc.nextLine()).equals("c")) {
+			ProxyDBHandler.showTable(line);
+			System.out.println("type tables names to see the changes..."
+					+ " table names: autos, optionsets, options... type c to continue");
 		}
-		try {
-			out = new ObjectOutputStream(client.getOutputStream());
-			in = new ObjectInputStream(client.getInputStream());
-		} catch (IOException e) {
-			System.out.println("Cannot connect I/O streams to server");
+		/* change optionset name */
+		autoFactory.updateOptionSetName("Chevrolet Corvette STINGRAY", "Transmission", "Super Drivetrain");
+		System.out.println("Change Chevrolet Corvette STINGRAY's OptionSet name Transmission");
+		System.out.println("type tables names to see the changes..."
+				+ " table names: autos, optionsets, options... type c to continue");
+		while (!(line = sc.nextLine()).equals("c")) {
+			ProxyDBHandler.showTable(line);
 		}
-		try {
-			out.writeObject("upload");
-			Object fromServer;
-			while ((fromServer = in.readObject()) == null);
-			String s = (String)fromServer;
-			System.out.println("from server: " + s);
-			out.writeObject(p);
-			out.close();
-			in.close();
-		} catch (Exception e) {
-			System.out.print("can't write to sever");
+		/* delete an auto */
+		autoFactory.deleteAuto("Toyota Prius");
+		System.out.println("Delete Toyota Prius from the DB");
+		System.out.println("type tables names to see the changes..."
+				+ " table names: autos, optionsets, options... type c to continue");
+		while (!(line = sc.nextLine()).equals("c")) {
+			ProxyDBHandler.showTable(line);
 		}
 	}
 

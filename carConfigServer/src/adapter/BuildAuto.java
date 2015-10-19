@@ -7,6 +7,7 @@ package adapter;
 import scale.EditAutoSync;
 import server.AutoServer;
 
-public class BuildAuto extends ProxyAutomobile implements CreateAuto, UpdateAuto, FixAuto, EditAutoSync, AutoServer {
+public class BuildAuto extends ProxyAutomobile implements 
+CreateAuto, UpdateAuto, FixAuto, EditAutoSync, AutoServer, DeleteAuto {
 	
 }

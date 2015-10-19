@@ -1,0 +1,31 @@
+DROP DATABASE autos;
+CREATE DATABASE autos;
+USE autos;
+
+CREATE TABLE autos (
+	auto_id INTEGER NOT NULL AUTO_INCREMENT,
+	uniName VARCHAR(255) NOT NULL,
+	base_price INTEGER NOT NULL,
+	PRIMARY KEY (auto_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE optionsets (
+	set_id INTEGER NOT NULL AUTO_INCREMENT,
+	set_name VARCHAR(255) NOT NULL,
+	auto_id INTEGER NOT NULL, 
+	PRIMARY KEY (set_id),
+	FOREIGN KEY (auto_id)
+	REFERENCES autos (auto_id)
+	ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE options (
+	opt_id INTEGER NOT NULL AUTO_INCREMENT,
+	opt_name VARCHAR(255) NOT NULL,
+	opt_price INTEGER NOT NULL,
+	set_id INTEGER NOT NULL,
+	PRIMARY KEY (opt_id),
+	FOREIGN KEY (set_id)
+	REFERENCES optionsets (set_id)
+	ON DELETE CASCADE
+) ENGINE=InnoDB;

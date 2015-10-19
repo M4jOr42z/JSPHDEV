@@ -25,10 +25,10 @@ import java.util.Map.Entry;
 
 public class Properties implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private HashMap<String, String> carProperties;
+	private HashMap<String, String> properties;
 	
 	public Properties() {
-		carProperties = new HashMap<String, String>();
+		properties = new HashMap<String, String>();
 	}
 	
 	// for loading a car properties file into an object for transferring through the network
@@ -45,7 +45,7 @@ public class Properties implements Serializable {
 					return;
 				}
 				else
-					carProperties.put(keyValue[0], keyValue[1]);
+					properties.put(keyValue[0], keyValue[1]);
 				oneLine = reader.readLine();
 			}
 		} catch (IOException e) {
@@ -62,12 +62,12 @@ public class Properties implements Serializable {
 	
 	// getter method for getting value of each key
 	public String getProperties(String name) {
-		return carProperties.get(name);
+		return properties.get(name);
 	}
 	
 	// print properties
 	public void printInfo() {
-		Iterator<Entry<String, String>> iter = carProperties.entrySet().iterator();
+		Iterator<Entry<String, String>> iter = properties.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<String, String> pair = (Map.Entry<String, String>)iter.next();
 			System.out.printf("%s = %s\n", pair.getKey(), pair.getValue());

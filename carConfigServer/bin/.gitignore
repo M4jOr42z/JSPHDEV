@@ -1,7 +1,3 @@
+/database/
 /adapter/
 /driver/
-/exception/
-/model/
-/scale/
-/server/
-/util/

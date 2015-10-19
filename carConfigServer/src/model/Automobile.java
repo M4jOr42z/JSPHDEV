@@ -277,6 +277,11 @@ public class Automobile implements Serializable {
 			
 	}
 	
+	/* get a unique identifiable name */
+	public String getUniqueName() {
+		return make + " " + model;
+	}
+	
 	/* print */
 	public void printInfo() {
 		System.out.printf("make: %s, model: %s, base price: %d\n", this.make, this.model, this.basePrice);

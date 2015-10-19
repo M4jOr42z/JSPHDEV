@@ -12,14 +12,19 @@ import util.Properties;
 import java.io.*;
 
 import java.util.LinkedHashMap;
+
+import database.DBHandler;
+
 import java.util.ArrayList;
 
 import exception.WrongInputException;
 import scale.*;
 
 public abstract class ProxyAutomobile {
+	// using "make+model as the unique identifier"
 	private static LinkedHashMap<String, Automobile> autos = new LinkedHashMap<String, Automobile>(); // (modelName, auto) pair
 	private Integer threadId = 0;
+	private DBHandler dbHandle = new DBHandler(); // for syncing LHM with database
 	
 	/* in CreateAuto API */
 	/* build the auto model object */
@@ -33,8 +38,9 @@ public abstract class ProxyAutomobile {
 			/* put the built model to collection */
 			if (a1 != null)  {
 				System.out.println("Built a new vehicle:");
-				a1.printInfo();
-				autos.put(a1.getModel(), a1);
+				a1.printInfo(); 
+				autos.put(a1.getUniqueName(), a1);
+				dbHandle.createAutoInDB(a1); // sync in DB
 				return true;
 			}
 		}
@@ -54,12 +60,12 @@ public abstract class ProxyAutomobile {
 		}
 	}
 	
-	/* in UpdateAuto API*/
 	/* update the OptionSet name of a specified model */
 	public void updateOptionSetName(String modelname, String setName, String newName) {
 		if (autos.containsKey(modelname)) {
 			Automobile a1 = autos.get(modelname);
 			a1.updatOptionSetName(setName, newName);
+			dbHandle.updateAutoOptionSetNameInDB(a1.getUniqueName(), setName, newName); // sync in DB
 		}
 		else
 			System.out.println("model does not exist.");
@@ -69,6 +75,7 @@ public abstract class ProxyAutomobile {
 		if (autos.containsKey(modelname)) {
 			Automobile a1 = autos.get(modelname);
 			a1.updateOptionPrice(setName, optionName, newprice);
+			dbHandle.updateAutoOptionPriceInDB(a1.getUniqueName(), setName, optionName, newprice); // sync in DB
 		}
 		else
 			System.out.println("model deose not exist.");
@@ -79,6 +86,14 @@ public abstract class ProxyAutomobile {
 		a1.setOptionChoice(setName, optName);
 		synchronized (a1) {
 			
+		}
+	}
+	
+	/* delete operations on Auto object */
+	public void deleteAuto(String modelName) {
+		if (autos.containsKey(modelName)) {
+			autos.remove(modelName);
+			dbHandle.deleteAutoInDB(modelName); // sync in DB
 		}
 	}
 	
@@ -154,7 +169,8 @@ public abstract class ProxyAutomobile {
 			System.out.println("Built a new vehicle:");
 			a1.printInfo();
 			/* add the built auto to LHM */
-			autos.put(a1.getModel(), a1);
+			autos.put(a1.getUniqueName(), a1);
+			dbHandle.createAutoInDB(a1); // sync in DB
 		} catch (Exception e) {
 			System.out.println("Cannot load the props to Auto");
 			return false;
